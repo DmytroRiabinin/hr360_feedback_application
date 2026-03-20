@@ -2,7 +2,7 @@
   "accentColor": "{{appsmith.theme.colors.primaryColor}}",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 21,
+  "bottomRow": 24,
   "boxShadow": "none",
   "defaultOptionValue": "ALL",
   "dynamicBindingPathList": [
@@ -13,15 +13,15 @@
       "key": "borderRadius"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onDropdownOpen"
-    }
-  ],
   "dynamicHeight": "FIXED",
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onDropdownOpen"
     }
   ],
   "isDisabled": false,
@@ -44,6 +44,7 @@
   "mobileRightColumn": 26,
   "mobileTopRow": 22,
   "needsErrorInfo": false,
+  "onDropdownOpen": "{{ eventHandler.loadReviewedPersonOptions() }}",
   "optionLabel": "name",
   "optionValue": "email",
   "parentColumnSpace": 17.5625,
@@ -52,11 +53,10 @@
   "placeholderText": "Select option",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 26,
+  "rightColumn": 27,
   "serverSideFiltering": false,
-  "onDropdownOpen": "{{ eventHandler.loadReviewedPersonOptions() }}",
   "sourceData": "[\n  {\n    \"name\": \"All\",\n    \"email\": \"ALL\"\n  }\n]",
-  "topRow": 14,
+  "topRow": 17,
   "type": "SELECT_WIDGET",
   "version": 1,
   "widgetId": "85gw3vy0rx",
