@@ -1,0 +1,18 @@
+SELECT fr.*, 
+       u.name AS reviewed_person_name,
+       COUNT(fa.id) AS total,
+       COUNT(fa.id) FILTER (WHERE fa.status = 'submitted') AS completed
+FROM feedback_requests fr
+JOIN users u ON u.id = fr.reviewed_person_id
+LEFT JOIN feedback_assignments fa ON fa.request_id = fr.id
+WHERE
+  fr.status = COALESCE(NULLIF('{{this.params.status}}', ''), fr.status)
+  AND fr.deadline = COALESCE(CAST(NULLIF('{{this.params.deadline}}', '') AS DATE), fr.deadline)
+  AND (
+    COALESCE(NULLIF('{{this.params.reviewedPersonSearch}}', ''), '') = ''
+    OR u.name ILIKE '%' || NULLIF('{{this.params.reviewedPersonSearch}}', '') || '%'
+    OR u.email ILIKE '%' || NULLIF('{{this.params.reviewedPersonSearch}}', '') || '%'
+  )
+GROUP BY fr.id, u.name
+ORDER BY fr.deadline DESC, fr.created_at DESC;
+
