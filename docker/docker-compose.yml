@@ -1,0 +1,48 @@
+services:
+  appsmith:
+    image: appsmith/appsmith-ce:latest
+    container_name: hr360-appsmith
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - appsmith_data:/appsmith-stacks
+    env_file:
+      - appsmith.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - appsmith-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: hr360-postgres
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=hr360_feedback_application
+      - POSTGRES_USER=hr360
+      - POSTGRES_PASSWORD=hr360
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    networks:
+      - appsmith-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hr360 -d hr360_feedback_application"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  appsmith_data:
+  postgres_data:
+
+networks:
+  appsmith-network:
+    driver: bridge
+
