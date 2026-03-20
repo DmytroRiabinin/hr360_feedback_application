@@ -76,6 +76,14 @@ export default {
 		await qry_get_all_users.run();
 
 		const users = qry_get_all_users?.data ?? [];
+		const userCount = Array.isArray(users) ? users.length : 0;
+		if (userCount <= 1) {
+			// Typically means only the virtual "All" row exists (or the query returned nothing).
+			console.warn(
+				"[HR Dashboard.loadReviewedPersonOptions] qry_get_all_users rows:",
+				userCount
+			);
+		}
 		const options = [
 			{ name: "All", email: "ALL" },
 			...(Array.isArray(users) ? users : [])
