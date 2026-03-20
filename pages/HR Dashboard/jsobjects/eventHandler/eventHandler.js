@@ -71,43 +71,56 @@ export default {
 		});
 	},
 
-	async loadReviewedPersonOptions() {
+	loadReviewedPersonOptions() {
+		// IMPORTANT: do NOT mark as async.
+		// When called from `onDropdownOpen: {{ eventHandler.loadReviewedPersonOptions() }}`,
+		// an `async` function returns a Promise and Appsmith can log type/validation errors.
 		if (typeof qry_get_all_users === "undefined") return;
-		await qry_get_all_users.run();
 
-		const users = qry_get_all_users?.data ?? [];
-		const userCount = Array.isArray(users) ? users.length : 0;
-		if (userCount <= 1) {
-			// Typically means only the virtual "All" row exists (or the query returned nothing).
-			console.warn(
-				"[HR Dashboard.loadReviewedPersonOptions] qry_get_all_users rows:",
-				userCount
-			);
-		}
-		// Appsmith Select `setOptions` often expects { label, value }.
-		// We also keep { name, email } to match widget `optionLabel/optionValue`.
-		const options = [
-			{
-				name: "All",
-				email: "ALL",
-				label: "All",
-				value: "ALL",
-			},
-			...(Array.isArray(users) ? users : [])
-				.filter((u) => u?.email && u.email !== "ALL")
-				.map((u) => {
-					const email = String(u.email);
-					return {
-						name: email,
-						email,
-						label: email,
-						value: email,
-					};
-				}),
-		];
+		return qry_get_all_users
+			.run()
+			.then(() => {
+				const users = qry_get_all_users?.data ?? [];
+				const userCount = Array.isArray(users) ? users.length : 0;
+				if (userCount <= 1) {
+					// Typically means only the virtual "All" row exists (or the query returned nothing).
+					console.warn(
+						"[HR Dashboard.loadReviewedPersonOptions] qry_get_all_users rows:",
+						userCount
+					);
+				}
 
-		// Populate Select options at runtime (keeps `sourceData` static for linter stability).
-		await select_reviewed_person_search.setOptions(options);
+				// Appsmith Select `setOptions` often expects { label, value }.
+				// We also keep { name, email } to match widget `optionLabel/optionValue`.
+				const options = [
+					{
+						name: "All",
+						email: "ALL",
+						label: "All",
+						value: "ALL",
+					},
+					...(Array.isArray(users) ? users : [])
+						.filter((u) => u?.email && u.email !== "ALL")
+						.map((u) => {
+							const email = String(u.email);
+							return {
+								name: email,
+								email,
+								label: email,
+								value: email,
+							};
+						}),
+				];
+
+				// Populate Select options at runtime (keeps `sourceData` static for linter stability).
+				return select_reviewed_person_search.setOptions(options);
+			})
+			.catch((e) => {
+				console.warn(
+					"[HR Dashboard.loadReviewedPersonOptions] failed to load options:",
+					e
+				);
+			});
 	},
 
 	async onPageLoad() {
@@ -131,8 +144,9 @@ export default {
 		}
 
 		// Ensure Select is populated with users (runtime).
+		// Populate Select options at runtime (non-blocking).
 		try {
-			await this.loadReviewedPersonOptions();
+			this.loadReviewedPersonOptions();
 		} catch {
 			// ignore - keep fallback "All"
 		}
