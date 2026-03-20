@@ -50,7 +50,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 26,
   "serverSideFiltering": false,
-  "sourceData": "[\n  {\n    \"name\": \"Blue\",\n    \"code\": \"BLUE\"\n  },\n  {\n    \"name\": \"Green\",\n    \"code\": \"GREEN\"\n  },\n  {\n    \"name\": \"Red\",\n    \"code\": \"RED\"\n  }\n]",
+  "sourceData": "{{ (qry_get_all_users?.data ?? []).filter(u => u.email).map(u => ({ name: u.email, code: u.email })) }}",
   "topRow": 14,
   "type": "SELECT_WIDGET",
   "version": 1,

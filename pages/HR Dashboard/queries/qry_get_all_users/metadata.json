@@ -26,6 +26,6 @@
     "name": "qry_get_all_users",
     "pageId": "HR Dashboard",
     "runBehaviour": "MANUAL",
-    "userSetOnLoad": false
+    "userSetOnLoad": true
   }
 }

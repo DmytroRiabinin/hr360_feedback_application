@@ -6,18 +6,16 @@ export default {
 
 	getStatusFilter() {
 		// Expected widget: sel_status (Select)
-		const raw =
-					(sel_status?.selectedOptionValue ?? sel_status?.value ?? sel_status?.selectedValue ?? "");
+		const raw = sel_status?.selectedOptionValue ?? "";
 		return raw ? String(raw).trim() : "";
 	},
 
 	getDeadlineFilter() {
 		// Expected widget: dp_deadline (DatePicker)
-		const raw =
-					dp_deadline?.selectedDate ?? dp_deadline?.dateValue ?? dp_deadline?.value ?? "";
+		const raw = dp_deadline?.selectedDate ?? "";
 
 		if (!raw) return "";
-		if (typeof raw === "string") return raw;
+		if (typeof raw === "string") return raw.slice(0, 10);
 
 		// Date object -> YYYY-MM-DD
 		try {
@@ -29,11 +27,7 @@ export default {
 
 	getReviewedPersonSearch() {
 		// Prefer Select widget (email) if it exists.
-		const selected =
-			(select_reviewed_person_search?.selectedOptionValue ??
-				select_reviewed_person_search?.value ??
-				select_reviewed_person_search?.selectedValue ??
-				"");
+		const selected = select_reviewed_person_search?.selectedOptionValue ?? "";
 		if (selected) return String(selected).trim();
 
 		// Fallback: Input widget (free text).
@@ -94,6 +88,15 @@ export default {
 			// ignore and continue for local dev
 		}
 
+		// Ensure reviewed-person select is populated.
+		try {
+			if (typeof qry_get_all_users !== "undefined") {
+				await qry_get_all_users.run();
+			}
+		} catch {
+			// ignore - page can still function without select options
+		}
+
 		await this.loadRequests();
 	},
 
@@ -102,16 +105,8 @@ export default {
 			console.warn("[JSObject1.loadRequests] qry_get_requests is not defined");
 			return;
 		}
-
-		const status = this.getStatusFilter();
-		const deadline = this.getDeadlineFilter();
-		const reviewedPersonSearch = this.getReviewedPersonSearch();
-
-		await qry_get_requests.run({
-			status,
-			deadline,
-			reviewedPersonSearch,
-		});
+		// Query returns all requests; filtering happens in the tableData binding.
+		await qry_get_requests.run();
 	},
 
 	async onCreateNew() {

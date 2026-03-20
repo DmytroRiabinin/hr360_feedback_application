@@ -668,7 +668,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 62,
   "searchKey": "",
-  "tableData": "{{ eventHandler.getFilteredRequestsData(sel_status?.selectedOptionValue ?? sel_status?.value ?? sel_status?.selectedValue ?? '', dp_deadline?.selectedDate ?? dp_deadline?.dateValue ?? dp_deadline?.value ?? '', select_reviewed_person_search?.selectedOptionValue ?? select_reviewed_person_search?.value ?? select_reviewed_person_search?.selectedValue ?? '') }}",
+  "tableData": "{{ eventHandler.getFilteredRequestsData(sel_status?.selectedOptionValue ?? '', dp_deadline?.selectedDate ?? '', select_reviewed_person_search?.selectedOptionValue ?? '') }}",
   "textSize": "0.875rem",
   "topRow": 26,
   "totalRecordsCount": 0,
