@@ -7,14 +7,14 @@ export default {
 	getStatusFilter() {
 		// Expected widget: sel_status (Select)
 		const raw =
-			(sel_status?.selectedOptionValue ?? sel_status?.value ?? sel_status?.selectedValue ?? "");
+					(sel_status?.selectedOptionValue ?? sel_status?.value ?? sel_status?.selectedValue ?? "");
 		return raw ? String(raw).trim() : "";
 	},
 
 	getDeadlineFilter() {
 		// Expected widget: dp_deadline (DatePicker)
 		const raw =
-			dp_deadline?.selectedDate ?? dp_deadline?.dateValue ?? dp_deadline?.value ?? "";
+					dp_deadline?.selectedDate ?? dp_deadline?.dateValue ?? dp_deadline?.value ?? "";
 
 		if (!raw) return "";
 		if (typeof raw === "string") return raw;
@@ -30,11 +30,11 @@ export default {
 	getReviewedPersonSearch() {
 		// Expected widget: reviewed person search input (implementation-dependent)
 		const raw =
-			inp_reviewed_person_search?.text ??
-			inp_reviewed_person_search?.value ??
-			inp_reviewed_person?.text ??
-			inp_reviewed_person?.value ??
-			"";
+					inp_reviewed_person_search?.text ??
+					inp_reviewed_person_search?.value ??
+					inp_reviewed_person?.text ??
+					inp_reviewed_person?.value ??
+					"";
 		return raw ? String(raw).trim() : "";
 	},
 
@@ -79,10 +79,10 @@ export default {
 		// Prefer explicit param, but also support calling without args
 		// (e.g. row click / selection-based handlers).
 		const rawId =
-			requestId ??
-			tbl_requests?.selectedRow?.id ??
-			tbl_requests?.selectedRow?.request_id ??
-			tbl_requests?.selectedRow?.requestId;
+					requestId ??
+					tbl_requests?.selectedRow?.id ??
+					tbl_requests?.selectedRow?.request_id ??
+					tbl_requests?.selectedRow?.requestId;
 
 		const rid = this.normalizeId(rawId);
 		if (!rid) {

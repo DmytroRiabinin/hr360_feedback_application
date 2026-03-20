@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "69bd2094d18d505bb4504f28_34203d50-13ac-4fab-b9e9-b435cd4fc22e",
+  "id": "HR Dashboard_eventHandler",
+  "unpublishedCollection": {
+    "name": "eventHandler",
+    "pageId": "HR Dashboard",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}
