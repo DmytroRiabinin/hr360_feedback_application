@@ -72,7 +72,7 @@
 ```sql
 -- Users (if not already in external DB, or adapt to existing schema)
 CREATE TABLE IF NOT EXISTS users (
-  id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id    TEXT PRIMARY KEY,
   name  TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   slack_user_id TEXT
@@ -82,13 +82,13 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS feedback_requests (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   cycle_name          TEXT NOT NULL,
-  reviewed_person_id  UUID REFERENCES users(id),
+  reviewed_person_id  TEXT NOT NULL,
   request_type        TEXT CHECK (request_type IN ('self','peer','manager','upward')) NOT NULL,
   status              TEXT CHECK (status IN ('draft','active','closed','archived')) NOT NULL DEFAULT 'draft',
   deadline            DATE NOT NULL,
   notes               TEXT,
   reference_link      TEXT,
-  created_by          UUID REFERENCES users(id),
+  created_by          TEXT NOT NULL,
   created_at          TIMESTAMPTZ DEFAULT now(),
   updated_at          TIMESTAMPTZ DEFAULT now()
 );
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS feedback_requests (
 CREATE TABLE IF NOT EXISTS feedback_assignments (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   request_id   UUID REFERENCES feedback_requests(id),
-  reviewer_id  UUID REFERENCES users(id),
+  reviewer_id  TEXT NOT NULL,
   status       TEXT CHECK (status IN ('pending','submitted')) NOT NULL DEFAULT 'pending',
   submitted_at TIMESTAMPTZ,
   UNIQUE (request_id, reviewer_id)   -- prevents duplicates
@@ -108,8 +108,8 @@ CREATE TABLE IF NOT EXISTS feedback_responses (
   id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   assignment_id      UUID REFERENCES feedback_assignments(id),
   request_id         UUID REFERENCES feedback_requests(id),
-  reviewed_person_id UUID REFERENCES users(id),
-  reviewer_id        UUID REFERENCES users(id),
+  reviewed_person_id TEXT NOT NULL,
+  reviewer_id        TEXT NOT NULL,
   text_answers       JSONB DEFAULT '{}',
   ratings            JSONB DEFAULT '{}',
   submitted_at       TIMESTAMPTZ DEFAULT now()
