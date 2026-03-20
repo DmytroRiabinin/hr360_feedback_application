@@ -18,7 +18,7 @@
   "icon": "couples",
   "pages": [
     {
-      "id": "Page1",
+      "id": "Page_1",
       "isDefault": true
     }
   ],
