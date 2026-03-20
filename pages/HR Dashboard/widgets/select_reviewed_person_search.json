@@ -19,7 +19,11 @@
       "key": "sourceData"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onDropdownOpen"
+    }
+  ],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
@@ -40,6 +44,7 @@
   "mobileRightColumn": 26,
   "mobileTopRow": 22,
   "needsErrorInfo": false,
+  "onDropdownOpen": "{{ eventHandler.loadReviewedPersonOptions() }}",
   "optionLabel": "name",
   "optionValue": "email",
   "parentColumnSpace": 17.5625,

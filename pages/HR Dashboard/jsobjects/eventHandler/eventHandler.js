@@ -71,6 +71,20 @@ export default {
 		});
 	},
 
+	async loadReviewedPersonOptions() {
+		if (typeof qry_get_all_users === "undefined") return;
+		await qry_get_all_users.run();
+
+		const users = qry_get_all_users?.data ?? [];
+		const options = [
+			{ name: "All", email: "ALL" },
+			...(users || [])
+				.filter((u) => u?.email && u.email !== "ALL")
+				.map((u) => ({ name: u.email, email: u.email })),
+		];
+		await select_reviewed_person_search.setOptions(options);
+	},
+
 	async onPageLoad() {
 		// Soft guard: if we can't determine role yet, still load MVP data.
 		try {
@@ -85,20 +99,7 @@ export default {
 
 		// Ensure reviewed-person select is populated.
 		try {
-			if (typeof qry_get_all_users !== "undefined") {
-				await qry_get_all_users.run();
-
-				const users = qry_get_all_users?.data ?? [];
-				const options = [
-					{ name: "All", email: "ALL" },
-					...(users || [])
-						.filter((u) => u?.email && u.email !== "ALL")
-						.map((u) => ({ name: u.email, email: u.email })),
-				];
-
-				// Populate select options after query finishes.
-				await select_reviewed_person_search.setOptions(options);
-			}
+			await this.loadReviewedPersonOptions();
 		} catch {
 			// ignore - page can still function without select options
 		}
