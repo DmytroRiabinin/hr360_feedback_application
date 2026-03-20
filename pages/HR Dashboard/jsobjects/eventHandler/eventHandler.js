@@ -34,7 +34,9 @@ export default {
 			select_reviewed_person_search?.selectedValue ??
 			select_reviewed_person_search?.value ??
 			"";
-		return selected ? String(selected).trim() : "";
+		const normalized = selected ? String(selected).trim() : "";
+		// Special "All" option should behave like empty search (no filtering).
+		return normalized === "ALL" ? "" : normalized;
 	},
 
 	getFilteredRequestsData(statusRaw, deadlineRaw, searchRaw) {
@@ -49,10 +51,9 @@ export default {
 					? deadlineRaw.slice(0, 10)
 					: (deadlineRaw?.toISOString?.().slice(0, 10) ?? ""))
 				: this.getDeadlineFilter(); // YYYY-MM-DD or ""
-		const search =
-			String(searchRaw ?? this.getReviewedPersonSearch() ?? "")
-				.toLowerCase()
-				.trim();
+		const rawSearch = searchRaw ?? this.getReviewedPersonSearch() ?? "";
+		const normalizedSearch = String(rawSearch).trim();
+		const search = (normalizedSearch === "ALL" ? "" : normalizedSearch).toLowerCase();
 
 		return (rows ?? []).filter((r) => {
 			if (status && String(r?.status ?? "") !== status) return false;
