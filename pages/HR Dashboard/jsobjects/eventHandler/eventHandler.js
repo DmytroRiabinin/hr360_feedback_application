@@ -30,9 +30,9 @@ export default {
 	getReviewedPersonSearch() {
 		// Prefer Select widget (email) if it exists.
 		const selected =
-			(sel_reviewed_person?.selectedOptionValue ??
-				sel_reviewed_person?.value ??
-				sel_reviewed_person?.selectedValue ??
+			(select_reviewed_person_search?.selectedOptionValue ??
+				select_reviewed_person_search?.value ??
+				select_reviewed_person_search?.selectedValue ??
 				"");
 		if (selected) return String(selected).trim();
 
