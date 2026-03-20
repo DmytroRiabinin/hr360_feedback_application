@@ -87,6 +87,17 @@ export default {
 		try {
 			if (typeof qry_get_all_users !== "undefined") {
 				await qry_get_all_users.run();
+
+				const users = qry_get_all_users?.data ?? [];
+				const options = [
+					{ name: "All", email: "ALL" },
+					...(users || [])
+						.filter((u) => u?.email && u.email !== "ALL")
+						.map((u) => ({ name: u.email, email: u.email })),
+				];
+
+				// Populate select options after query finishes.
+				await select_reviewed_person_search.setOptions(options);
 			}
 		} catch {
 			// ignore - page can still function without select options
