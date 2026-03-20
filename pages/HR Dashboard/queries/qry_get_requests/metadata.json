@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT fr.*, \n       u.name AS reviewed_person_name,\n       u.email AS reviewed_person_email,\n       COUNT(fa.id) AS total,\n       COUNT(fa.id) FILTER (WHERE fa.status = 'submitted') AS completed\nFROM feedback_requests fr\nJOIN users u ON u.id = fr.reviewed_person_id\nLEFT JOIN feedback_assignments fa ON fa.request_id = fr.id\nWHERE\n  fr.status = COALESCE(NULLIF(NULLIF('{{this.params.status}}', ''), 'undefined'), fr.status)\n  AND fr.deadline = COALESCE(CAST(NULLIF(NULLIF('{{this.params.deadline}}', ''), 'undefined') AS DATE), fr.deadline)\n  AND (\n    COALESCE(NULLIF(NULLIF('{{this.params.reviewedPersonSearch}}', ''), 'undefined'), '') = ''\n    OR u.name ILIKE '%' || NULLIF(NULLIF('{{this.params.reviewedPersonSearch}}', ''), 'undefined') || '%'\n    OR u.email ILIKE '%' || NULLIF(NULLIF('{{this.params.reviewedPersonSearch}}', ''), 'undefined') || '%'\n  )\nGROUP BY fr.id, u.name, u.email\nORDER BY fr.deadline DESC, fr.created_at DESC;\n\n",
+      "body": "SELECT fr.*,\n       u.name AS reviewed_person_name,\n       u.email AS reviewed_person_email,\n       COUNT(fa.id) AS total,\n       COUNT(fa.id) FILTER (WHERE fa.status = 'submitted') AS completed\nFROM feedback_requests fr\nJOIN users u ON u.id = fr.reviewed_person_id\nLEFT JOIN feedback_assignments fa ON fa.request_id = fr.id\nGROUP BY fr.id, u.name, u.email\nORDER BY fr.deadline DESC, fr.created_at DESC;\n\n",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,11 +22,7 @@
       "name": "hr360_feedback_application",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [
-      {
-        "key": "actionConfiguration.body"
-      }
-    ],
+    "dynamicBindingPathList": [],
     "name": "qry_get_requests",
     "pageId": "HR Dashboard",
     "runBehaviour": "MANUAL",
