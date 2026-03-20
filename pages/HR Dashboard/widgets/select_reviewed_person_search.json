@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 21,
   "boxShadow": "none",
-  "defaultOptionValue": "ALL",
+  "defaultOptionValue": "",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -41,7 +41,7 @@
   "mobileTopRow": 22,
   "needsErrorInfo": false,
   "optionLabel": "name",
-  "optionValue": "code",
+  "optionValue": "email",
   "parentColumnSpace": 17.5625,
   "parentId": "0",
   "parentRowSpace": 10,
@@ -50,7 +50,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 26,
   "serverSideFiltering": false,
-  "sourceData": "{{ (function(){ var users = ((qry_get_all_users && qry_get_all_users.data) ? qry_get_all_users.data : []); users = (users || []).filter(function(u){ return u && u.email; }).map(function(u){ return { name: u.email, code: u.email }; }); return [{ name: 'All', code: 'ALL' }].concat(users); })() }}",
+  "sourceData": "{{ qry_get_all_users?.data ?? [] }}",
   "topRow": 14,
   "type": "SELECT_WIDGET",
   "version": 1,
