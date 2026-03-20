@@ -19,6 +19,7 @@
       "key": "sourceData"
     }
   ],
+  "dynamicTriggerPathList": [],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
@@ -27,7 +28,7 @@
   "key": "06l180wsi1",
   "labelAlignment": "left",
   "labelPosition": "Top",
-  "labelText": "Label",
+  "labelText": "Status",
   "labelTextSize": "0.875rem",
   "labelWidth": 5,
   "leftColumn": 6,
