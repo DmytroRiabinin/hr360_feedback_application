@@ -668,7 +668,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 61,
   "searchKey": "",
-  "tableData": "{{ eventHandler.getFilteredRequestsData(sel_status?.selectedOptionValue ?? sel_status?.value ?? sel_status?.selectedValue ?? '', dp_deadline?.selectedDate ?? dp_deadline?.dateValue ?? dp_deadline?.value ?? '', inp_reviewed_person_search?.text ?? inp_reviewed_person_search?.value ?? '') }}",
+  "tableData": "{{ qry_get_requests?.data ?? [] }}",
   "textSize": "0.875rem",
   "topRow": 27,
   "totalRecordsCount": 0,
