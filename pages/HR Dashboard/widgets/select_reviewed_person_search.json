@@ -49,7 +49,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 26,
   "serverSideFiltering": false,
-  "sourceData": "{{ (qry_get_all_users && qry_get_all_users.data && qry_get_all_users.data.length > 0) ? qry_get_all_users.data : [{\"name\":\"All\",\"email\":\"ALL\"}] }}",
+  "sourceData": "[{\"name\":\"All\",\"email\":\"ALL\"}]",
   "topRow": 14,
   "type": "SELECT_WIDGET",
   "version": 1,

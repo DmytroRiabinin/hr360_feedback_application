@@ -72,8 +72,19 @@ export default {
 	},
 
 	async loadReviewedPersonOptions() {
-		// Options are driven by `select_reviewed_person_search.sourceData`
-		// so we don't need to imperatively populate it.
+		if (typeof qry_get_all_users === "undefined") return;
+		await qry_get_all_users.run();
+
+		const users = qry_get_all_users?.data ?? [];
+		const options = [
+			{ name: "All", email: "ALL" },
+			...(Array.isArray(users) ? users : [])
+				.filter((u) => u?.email && u.email !== "ALL")
+				.map((u) => ({ name: u.email, email: u.email })),
+		];
+
+		// Populate Select options at runtime (keeps `sourceData` static for linter stability).
+		await select_reviewed_person_search.setOptions(options);
 	},
 
 	async onPageLoad() {
@@ -81,8 +92,7 @@ export default {
 		try {
 			const email = appsmith?.user?.email;
 			if (!email) {
-				showAlert("Please login to continue.", "warning");
-				return;
+				console.warn("[HR Dashboard.onPageLoad] appsmith.user.email missing; continuing for local dev");
 			}
 		} catch {
 			// ignore and continue for local dev
@@ -95,6 +105,13 @@ export default {
 			}
 		} catch {
 			// ignore - the select will fall back to `All`
+		}
+
+		// Ensure Select is populated with users (runtime).
+		try {
+			await this.loadReviewedPersonOptions();
+		} catch {
+			// ignore - keep fallback "All"
 		}
 
 		await this.loadRequests();
