@@ -28,13 +28,21 @@ export default {
 	},
 
 	getReviewedPersonSearch() {
-		// Expected widget: reviewed person search input (implementation-dependent)
+		// Prefer Select widget (email) if it exists.
+		const selected =
+			(sel_reviewed_person?.selectedOptionValue ??
+				sel_reviewed_person?.value ??
+				sel_reviewed_person?.selectedValue ??
+				"");
+		if (selected) return String(selected).trim();
+
+		// Fallback: Input widget (free text).
 		const raw =
-					inp_reviewed_person_search?.text ??
-					inp_reviewed_person_search?.value ??
-					inp_reviewed_person?.text ??
-					inp_reviewed_person?.value ??
-					"";
+			inp_reviewed_person_search?.text ??
+			inp_reviewed_person_search?.value ??
+			inp_reviewed_person?.text ??
+			inp_reviewed_person?.value ??
+			"";
 		return raw ? String(raw).trim() : "";
 	},
 
