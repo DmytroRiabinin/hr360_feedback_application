@@ -76,8 +76,9 @@ export default {
 		// When called from `onDropdownOpen: {{ eventHandler.loadReviewedPersonOptions() }}`,
 		// an `async` function returns a Promise and Appsmith can log type/validation errors.
 		if (typeof qry_get_all_users === "undefined") return;
-
-		return qry_get_all_users
+		// IMPORTANT: do not return the Promise chain.
+		// `onDropdownOpen` should not evaluate to a value; it should just trigger side effects.
+		qry_get_all_users
 			.run()
 			.then(() => {
 				const users = qry_get_all_users?.data ?? [];
