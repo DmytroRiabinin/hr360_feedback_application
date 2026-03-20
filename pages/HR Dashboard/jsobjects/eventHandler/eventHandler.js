@@ -84,11 +84,26 @@ export default {
 				userCount
 			);
 		}
+		// Appsmith Select `setOptions` often expects { label, value }.
+		// We also keep { name, email } to match widget `optionLabel/optionValue`.
 		const options = [
-			{ name: "All", email: "ALL" },
+			{
+				name: "All",
+				email: "ALL",
+				label: "All",
+				value: "ALL",
+			},
 			...(Array.isArray(users) ? users : [])
 				.filter((u) => u?.email && u.email !== "ALL")
-				.map((u) => ({ name: u.email, email: u.email })),
+				.map((u) => {
+					const email = String(u.email);
+					return {
+						name: email,
+						email,
+						label: email,
+						value: email,
+					};
+				}),
 		];
 
 		// Populate Select options at runtime (keeps `sourceData` static for linter stability).
