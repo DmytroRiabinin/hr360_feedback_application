@@ -72,17 +72,8 @@ export default {
 	},
 
 	async loadReviewedPersonOptions() {
-		if (typeof qry_get_all_users === "undefined") return;
-		await qry_get_all_users.run();
-
-		const users = qry_get_all_users?.data ?? [];
-		const options = [
-			{ name: "All", email: "ALL" },
-			...(users || [])
-				.filter((u) => u?.email && u.email !== "ALL")
-				.map((u) => ({ name: u.email, email: u.email })),
-		];
-		await select_reviewed_person_search.setOptions(options);
+		// Options are driven by `select_reviewed_person_search.sourceData`
+		// so we don't need to imperatively populate it.
 	},
 
 	async onPageLoad() {
@@ -97,11 +88,13 @@ export default {
 			// ignore and continue for local dev
 		}
 
-		// Ensure reviewed-person select is populated.
+		// Ensure users query is executed so the Select options have real data.
 		try {
-			await this.loadReviewedPersonOptions();
+			if (typeof qry_get_all_users !== "undefined") {
+				await qry_get_all_users.run();
+			}
 		} catch {
-			// ignore - page can still function without select options
+			// ignore - the select will fall back to `All`
 		}
 
 		await this.loadRequests();
