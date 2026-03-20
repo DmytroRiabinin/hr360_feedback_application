@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 33,
+  "bottomRow": 21,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonVariant": "PRIMARY",
@@ -14,18 +14,24 @@
       "key": "borderRadius"
     }
   ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "isDefaultClickDisabled": true,
   "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "pytm63nfow",
-  "leftColumn": 32,
+  "leftColumn": 27,
   "minWidth": 120,
   "mobileBottomRow": 33,
   "mobileLeftColumn": 32,
   "mobileRightColumn": 48,
   "mobileTopRow": 29,
   "needsErrorInfo": false,
+  "onClick": "{{ eventHandler.onCreateNew() }}",
   "parentColumnSpace": 17.5625,
   "parentId": "0",
   "parentRowSpace": 10,
@@ -34,17 +40,11 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 48,
+  "rightColumn": 47,
   "text": "Create New Cycle",
-  "topRow": 29,
+  "topRow": 17,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "w44a37dlqa",
-  "widgetName": "btn_create_new_cycle",
-  "onClick": "{{ eventHandler.onCreateNew() }}",
-  "dynamicTriggerPathList": [
-    {
-      "key": "onClick"
-    }
-  ]
+  "widgetName": "btn_create_new_cycle"
 }

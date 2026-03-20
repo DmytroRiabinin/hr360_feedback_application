@@ -25,7 +25,7 @@
     "dynamicBindingPathList": [],
     "name": "qry_get_requests",
     "pageId": "HR Dashboard",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "ON_PAGE_LOAD",
     "userSetOnLoad": true
   }
 }
