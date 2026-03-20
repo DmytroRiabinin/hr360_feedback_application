@@ -50,7 +50,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 26,
   "serverSideFiltering": false,
-  "sourceData": "{{ [{ name: 'All', code: 'ALL' }, ...(qry_get_all_users.data || []).filter(u => u.email).map(u => ({ name: u.email, code: u.email }))] }}",
+  "sourceData": "{{ (function(){ var users = ((qry_get_all_users && qry_get_all_users.data) ? qry_get_all_users.data : []); users = (users || []).filter(function(u){ return u && u.email; }).map(function(u){ return { name: u.email, code: u.email }; }); return [{ name: 'All', code: 'ALL' }].concat(users); })() }}",
   "topRow": 14,
   "type": "SELECT_WIDGET",
   "version": 1,
