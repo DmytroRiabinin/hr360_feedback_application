@@ -31,8 +31,6 @@ export default {
 		// `select_reviewed_person_search`.
 		const selected =
 			select_reviewed_person_search?.selectedOptionValue ??
-			select_reviewed_person_search?.selectedValue ??
-			select_reviewed_person_search?.value ??
 			"";
 		return selected ? String(selected).trim() : "";
 	},
