@@ -35,10 +35,16 @@
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
   "rightColumn": 48,
-  "text": "Submit",
+  "text": "Create New Cycle",
   "topRow": 29,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "w44a37dlqa",
-  "widgetName": "btn_create_new_cycle"
+  "widgetName": "btn_create_new_cycle",
+  "onClick": "{{ eventHandler.onCreateNew() }}",
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ]
 }

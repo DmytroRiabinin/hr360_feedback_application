@@ -49,7 +49,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 26,
   "serverSideFiltering": false,
-  "sourceData": "[\n  {\n    \"name\": \"Blue\",\n    \"code\": \"BLUE\"\n  },\n  {\n    \"name\": \"Green\",\n    \"code\": \"GREEN\"\n  },\n  {\n    \"name\": \"Red\",\n    \"code\": \"RED\"\n  }\n]",
+  "sourceData": "[\n  {\n    \"name\": \"Draft\",\n    \"code\": \"draft\"\n  },\n  {\n    \"name\": \"Active\",\n    \"code\": \"active\"\n  },\n  {\n    \"name\": \"Closed\",\n    \"code\": \"closed\"\n  },\n  {\n    \"name\": \"Archived\",\n    \"code\": \"archived\"\n  }\n]",
   "topRow": 5,
   "type": "SELECT_WIDGET",
   "version": 1,

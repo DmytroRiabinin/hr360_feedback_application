@@ -38,6 +38,42 @@ export default {
 		return raw ? String(raw).trim() : "";
 	},
 
+	getFilteredRequestsData(statusRaw, deadlineRaw, searchRaw) {
+		// Client-side filtering so filters work without needing UI event wiring.
+		// Pass explicit args from bindings for better Appsmith reactivity.
+		const rows = qry_get_requests?.data ?? [];
+		const status =
+			(statusRaw !== undefined ? statusRaw : this.getStatusFilter()) || "";
+		const deadline =
+			deadlineRaw !== undefined
+				? (typeof deadlineRaw === "string"
+					? deadlineRaw.slice(0, 10)
+					: (deadlineRaw?.toISOString?.().slice(0, 10) ?? ""))
+				: this.getDeadlineFilter(); // YYYY-MM-DD or ""
+		const search =
+			String(searchRaw ?? this.getReviewedPersonSearch() ?? "")
+				.toLowerCase()
+				.trim();
+
+		return (rows ?? []).filter((r) => {
+			if (status && String(r?.status ?? "") !== status) return false;
+
+			if (deadline) {
+				// Postgres DATE typically comes as YYYY-MM-DD.
+				const rd = r?.deadline ? String(r.deadline).slice(0, 10) : "";
+				if (rd !== deadline) return false;
+			}
+
+			if (search) {
+				const name = String(r?.reviewed_person_name ?? "").toLowerCase();
+				const email = String(r?.reviewed_person_email ?? "").toLowerCase();
+				if (!name.includes(search) && !email.includes(search)) return false;
+			}
+
+			return true;
+		});
+	},
+
 	async onPageLoad() {
 		// Soft guard: if we can't determine role yet, still load MVP data.
 		try {

@@ -51,6 +51,14 @@
     },
     {
       "key": "boxShadow"
+    },
+    {
+      "key": "tableData"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onRowClick"
     }
   ],
   "dynamicPropertyPathList": [],
@@ -83,7 +91,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 44,
   "searchKey": "",
-  "tableData": "",
+  "tableData": "{{ eventHandler.getFilteredRequestsData(sel_status?.selectedOptionValue ?? sel_status?.value ?? sel_status?.selectedValue ?? '', dp_deadline?.selectedDate ?? dp_deadline?.dateValue ?? dp_deadline?.value ?? '', inp_reviewed_person_search?.text ?? inp_reviewed_person_search?.value ?? '') }}",
   "textSize": "0.875rem",
   "topRow": 40,
   "totalRecordsCount": 0,
@@ -91,5 +99,6 @@
   "version": 2,
   "verticalAlignment": "CENTER",
   "widgetId": "cp2sx3n4r0",
-  "widgetName": "tbl_requests"
+  "widgetName": "tbl_requests",
+  "onRowClick": "{{ eventHandler.onOpenRequest(tbl_requests?.selectedRow?.id ?? tbl_requests?.selectedRow?.request_id ?? tbl_requests?.selectedRow?.requestId) }}"
 }

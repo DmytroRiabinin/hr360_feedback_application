@@ -71,3 +71,30 @@ CREATE TABLE IF NOT EXISTS feedback_responses (
 CREATE INDEX IF NOT EXISTS idx_feedback_responses_reviewer ON feedback_responses(reviewer_id);
 CREATE INDEX IF NOT EXISTS idx_feedback_responses_request ON feedback_responses(request_id);
 
+-- Users (external user list for selectors)
+-- MVP requirement: id, name, email, optionally slack_user_id
+CREATE TABLE IF NOT EXISTS users (
+  id text PRIMARY KEY,
+  name text NOT NULL,
+  email text NOT NULL UNIQUE,
+  slack_user_id text
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_name ON users(name);
+
+-- Seed 10 test users for local development
+INSERT INTO users (id, name, email, slack_user_id)
+VALUES
+  ('user-0001', 'Test User 1', 'test.user1@example.com', 'slack-u1'),
+  ('user-0002', 'Test User 2', 'test.user2@example.com', 'slack-u2'),
+  ('user-0003', 'Test User 3', 'test.user3@example.com', 'slack-u3'),
+  ('user-0004', 'Test User 4', 'test.user4@example.com', 'slack-u4'),
+  ('user-0005', 'Test User 5', 'test.user5@example.com', 'slack-u5'),
+  ('user-0006', 'Test User 6', 'test.user6@example.com', 'slack-u6'),
+  ('user-0007', 'Test User 7', 'test.user7@example.com', 'slack-u7'),
+  ('user-0008', 'Test User 8', 'test.user8@example.com', 'slack-u8'),
+  ('user-0009', 'Test User 9', 'test.user9@example.com', 'slack-u9'),
+  ('user-0010', 'Test User 10', 'test.user10@example.com', 'slack-u10')
+ON CONFLICT (id) DO NOTHING;
+
