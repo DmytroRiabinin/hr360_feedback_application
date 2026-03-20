@@ -26,18 +26,9 @@ export default {
 	},
 
 	getReviewedPersonSearch() {
-		// Prefer Select widget (email) if it exists.
+		// Select widget (email). Returns "" if nothing selected.
 		const selected = select_reviewed_person_search?.selectedOptionValue ?? "";
-		if (selected) return String(selected).trim();
-
-		// Fallback: Input widget (free text).
-		const raw =
-			inp_reviewed_person_search?.text ??
-			inp_reviewed_person_search?.value ??
-			inp_reviewed_person?.text ??
-			inp_reviewed_person?.value ??
-			"";
-		return raw ? String(raw).trim() : "";
+		return selected ? String(selected).trim() : "";
 	},
 
 	getFilteredRequestsData(statusRaw, deadlineRaw, searchRaw) {
