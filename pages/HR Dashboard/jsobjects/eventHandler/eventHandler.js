@@ -6,13 +6,19 @@ export default {
 
 	getStatusFilter() {
 		// Expected widget: sel_status (Select)
-		const raw = sel_status?.selectedOptionValue ?? "";
+		const raw =
+			typeof sel_status !== "undefined"
+				? sel_status?.selectedOptionValue ?? ""
+				: "";
 		return raw ? String(raw).trim() : "";
 	},
 
 	getDeadlineFilter() {
 		// Expected widget: dp_deadline (DatePicker)
-		const raw = dp_deadline?.selectedDate ?? "";
+		const raw =
+			typeof dp_deadline !== "undefined"
+				? dp_deadline?.selectedDate ?? ""
+				: "";
 
 		if (!raw) return "";
 		if (typeof raw === "string") return raw.slice(0, 10);
@@ -27,14 +33,18 @@ export default {
 
 	getReviewedPersonSearch() {
 		// Select widget (email). Returns "" if nothing selected.
-		const selected = select_reviewed_person_search?.selectedOptionValue ?? "";
+		const selected =
+			typeof select_reviewed_person_search !== "undefined"
+				? select_reviewed_person_search?.selectedOptionValue ?? ""
+				: "";
 		return selected ? String(selected).trim() : "";
 	},
 
 	getFilteredRequestsData(statusRaw, deadlineRaw, searchRaw) {
 		// Client-side filtering so filters work without needing UI event wiring.
 		// Pass explicit args from bindings for better Appsmith reactivity.
-		const rows = qry_get_requests?.data ?? [];
+		const rows =
+			typeof qry_get_requests !== "undefined" ? qry_get_requests?.data ?? [] : [];
 		const status =
 			(statusRaw !== undefined ? statusRaw : this.getStatusFilter()) || "";
 		const deadline =

@@ -53,7 +53,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 26,
   "serverSideFiltering": false,
-  "sourceData": "{{ (qry_get_all_users?.data ?? []).filter(u => u.email).map(u => ({ name: u.email, code: u.email })) }}",
+  "sourceData": "{{ (qry_get_all_users?.data ?? []).map(u => ({ name: u.email, code: u.email })) }}",
   "topRow": 14,
   "type": "SELECT_WIDGET",
   "version": 1,
