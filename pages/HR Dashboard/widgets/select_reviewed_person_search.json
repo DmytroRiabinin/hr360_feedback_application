@@ -55,7 +55,7 @@
   "rightColumn": 26,
   "serverSideFiltering": false,
   "onDropdownOpen": "{{ eventHandler.loadReviewedPersonOptions() }}",
-  "sourceData": "{{ [{\"name\":\"All\",\"email\":\"ALL\"}] }}",
+  "sourceData": "[\n  {\n    \"name\": \"All\",\n    \"email\": \"ALL\"\n  }\n]",
   "topRow": 14,
   "type": "SELECT_WIDGET",
   "version": 1,
