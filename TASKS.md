@@ -154,13 +154,13 @@ CREATE TABLE IF NOT EXISTS feedback_responses (
 **Widgets:**
 - Filters row: status dropdown (`sel_status`), deadline date-picker (`dp_deadline`), reviewed person search input.
 - Table `tbl_requests` columns: Cycle Name, Reviewed Person, Type, Status (badge), Deadline, Completed/Total, Actions.
-- "Create New Cycle" button (top-right).
+- "Create New Request" button (top-right).
 
 **Acceptance criteria (AC1, AC5):**
 - Table loads all requests on page open.
 - Status and deadline filters work.
 - Clicking a row navigates to Request Detail with the correct `selectedRequestId`.
-- "Create New Cycle" navigates to Create Request page with an empty form.
+- "Create New Request" navigates to Create Request page with an empty form.
 
 ---
 

@@ -193,7 +193,7 @@ Confirmed constraints:
 - **Audience:** HR
 - Paginated list of feedback cycles
 - Filters: status, deadline, reviewed person
-- "Create New Cycle" button
+- "Create New Request" button
 - Per-row: status badge, completion counter, quick actions
 
 ### Page 1 — Create / Edit Request

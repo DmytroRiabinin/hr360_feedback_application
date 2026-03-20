@@ -85,7 +85,7 @@ The “Reviewed person” Select required a very specific setup in Appsmith:
 - Table loads data on page open.
 - `Status`, `Deadline`, and `Reviewed person` filters narrow the table correctly.
 - Clicking a row navigates to Request Detail with the correct request id.
-- “Create New Cycle” navigates to Create Request with an empty form.
+- “Create New Request” navigates to Create Request with an empty form.
 
 ## Key files (quick index)
 - `pages/HR Dashboard/jsobjects/eventHandler/eventHandler.js`
