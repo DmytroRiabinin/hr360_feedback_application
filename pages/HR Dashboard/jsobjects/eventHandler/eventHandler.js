@@ -49,7 +49,8 @@ export default {
 				: this.getDeadlineFilter(); // YYYY-MM-DD or ""
 		const rawSearch = searchRaw ?? this.getReviewedPersonSearch() ?? "";
 		const normalizedSearch = String(rawSearch).trim();
-		const search = normalizedSearch.toLowerCase();
+		const effectiveSearch = normalizedSearch === "ALL" ? "" : normalizedSearch;
+		const search = effectiveSearch.toLowerCase();
 
 		return (rows ?? []).filter((r) => {
 			if (status && String(r?.status ?? "") !== status) return false;
