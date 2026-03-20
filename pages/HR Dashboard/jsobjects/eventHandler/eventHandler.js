@@ -1,0 +1,191 @@
+export default {
+	normalizeId(raw) {
+		if (raw === undefined || raw === null) return "";
+		return String(raw).replace(/^"|"$/g, "").trim();
+	},
+
+	getStatusFilter() {
+		// Expected widget: sel_status (Select)
+		const raw = sel_status?.selectedOptionValue ?? "";
+		return raw ? String(raw).trim() : "";
+	},
+
+	getDeadlineFilter() {
+		// Expected widget: dp_deadline (DatePicker)
+		const raw = dp_deadline?.selectedDate ?? "";
+
+		if (!raw) return "";
+		if (typeof raw === "string") return raw.slice(0, 10);
+
+		// Date object -> YYYY-MM-DD
+		try {
+			return raw.toISOString().slice(0, 10);
+		} catch {
+			return String(raw);
+		}
+	},
+
+	getReviewedPersonSearch() {
+		// Reviewed person is selected by Select widget (email).
+		// Keep this method aligned with actual widgetName in UI:
+		// `select_reviewed_person_search`.
+		const selected =
+			select_reviewed_person_search?.selectedOptionValue ??
+			"";
+		return selected ? String(selected).trim() : "";
+	},
+
+	getFilteredRequestsData(statusRaw, deadlineRaw, searchRaw) {
+		// Client-side filtering so filters work without needing UI event wiring.
+		// Pass explicit args from bindings for better Appsmith reactivity.
+		const rows = qry_get_requests?.data ?? [];
+		const status =
+			(statusRaw !== undefined ? statusRaw : this.getStatusFilter()) || "";
+		const deadline =
+			deadlineRaw !== undefined
+				? (typeof deadlineRaw === "string"
+					? deadlineRaw.slice(0, 10)
+					: (deadlineRaw?.toISOString?.().slice(0, 10) ?? ""))
+				: this.getDeadlineFilter(); // YYYY-MM-DD or ""
+		const rawSearch = searchRaw ?? this.getReviewedPersonSearch() ?? "";
+		const normalizedSearch = String(rawSearch).trim();
+		const effectiveSearch = normalizedSearch === "ALL" ? "" : normalizedSearch;
+		const search = effectiveSearch.toLowerCase();
+
+		return (rows ?? []).filter((r) => {
+			if (status && String(r?.status ?? "") !== status) return false;
+
+			if (deadline) {
+				// Postgres DATE typically comes as YYYY-MM-DD.
+				const rd = r?.deadline ? String(r.deadline).slice(0, 10) : "";
+				if (rd !== deadline) return false;
+			}
+
+			if (search) {
+				const name = String(r?.reviewed_person_name ?? "").toLowerCase();
+				const email = String(r?.reviewed_person_email ?? "").toLowerCase();
+				if (!name.includes(search) && !email.includes(search)) return false;
+			}
+
+			return true;
+		});
+	},
+
+	loadReviewedPersonOptions() {
+		// IMPORTANT: do NOT mark as async.
+		// When called from `onDropdownOpen: {{ eventHandler.loadReviewedPersonOptions() }}`,
+		// an `async` function returns a Promise and Appsmith can log type/validation errors.
+		if (typeof qry_get_all_users === "undefined") return;
+		// IMPORTANT: do not return the Promise chain.
+		// `onDropdownOpen` should not evaluate to a value; it should just trigger side effects.
+		qry_get_all_users
+			.run()
+			.then(() => {
+				const users = qry_get_all_users?.data ?? [];
+				const userCount = Array.isArray(users) ? users.length : 0;
+				if (userCount <= 1) {
+					// Typically means only the virtual "All" row exists (or the query returned nothing).
+					console.warn(
+						"[HR Dashboard.loadReviewedPersonOptions] qry_get_all_users rows:",
+						userCount
+					);
+				}
+
+				// Appsmith Select `setOptions` often expects { label, value }.
+				// We also keep { name, email } to match widget `optionLabel/optionValue`.
+				const options = [
+					{
+						name: "All",
+						email: "ALL",
+						label: "All",
+						value: "ALL",
+					},
+					...(Array.isArray(users) ? users : [])
+						.filter((u) => u?.email && u.email !== "ALL")
+						.map((u) => {
+							const email = String(u.email);
+							return {
+								name: email,
+								email,
+								label: email,
+								value: email,
+							};
+						}),
+				];
+
+				// Populate Select options at runtime (keeps `sourceData` static for linter stability).
+				return select_reviewed_person_search.setOptions(options);
+			})
+			.catch((e) => {
+				console.warn(
+					"[HR Dashboard.loadReviewedPersonOptions] failed to load options:",
+					e
+				);
+			});
+	},
+
+	async onPageLoad() {
+		// Soft guard: if we can't determine role yet, still load MVP data.
+		try {
+			const email = appsmith?.user?.email;
+			if (!email) {
+				console.warn("[HR Dashboard.onPageLoad] appsmith.user.email missing; continuing for local dev");
+			}
+		} catch {
+			// ignore and continue for local dev
+		}
+
+		// Ensure users query is executed so the Select options have real data.
+		try {
+			if (typeof qry_get_all_users !== "undefined") {
+				await qry_get_all_users.run();
+			}
+		} catch {
+			// ignore - the select will fall back to `All`
+		}
+
+		// Ensure Select is populated with users (runtime).
+		// Populate Select options at runtime (non-blocking).
+		try {
+			this.loadReviewedPersonOptions();
+		} catch {
+			// ignore - keep fallback "All"
+		}
+
+		await this.loadRequests();
+	},
+
+	async loadRequests() {
+		if (typeof qry_get_requests === "undefined") {
+			console.warn("[JSObject1.loadRequests] qry_get_requests is not defined");
+			return;
+		}
+		// Query returns all requests; filtering happens in the tableData binding.
+		await qry_get_requests.run();
+	},
+
+	async onCreateNew() {
+		await storeValue("selectedRequestId", null);
+		await navigateTo("Create Request", {}, "SAME_WINDOW");
+	},
+
+	async onOpenRequest(requestId) {
+		// Prefer explicit param, but also support calling without args
+		// (e.g. row click / selection-based handlers).
+		const rawId =
+					requestId ??
+					tbl_requests?.selectedRow?.id ??
+					tbl_requests?.selectedRow?.request_id ??
+					tbl_requests?.selectedRow?.requestId;
+
+		const rid = this.normalizeId(rawId);
+		if (!rid) {
+			showAlert("Request id is missing.", "error");
+			return;
+		}
+
+		await storeValue("selectedRequestId", rid);
+		// Also pass params for the next page's query bindings (if they expect params)
+		await navigateTo("Request Detail", { requestId: rid, id: rid }, "SAME_WINDOW");
+	},
+}

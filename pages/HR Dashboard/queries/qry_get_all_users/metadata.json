@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT * FROM public.\"users\";",
+      "body": "SELECT id, email AS name, email, slack_user_id\nFROM public.\"users\"\nUNION ALL\nSELECT NULL::text AS id, 'All'::text AS name, 'ALL'::text AS email, NULL::text AS slack_user_id\nORDER BY name ASC;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -26,6 +26,6 @@
     "name": "qry_get_all_users",
     "pageId": "HR Dashboard",
     "runBehaviour": "MANUAL",
-    "userSetOnLoad": false
+    "userSetOnLoad": true
   }
 }

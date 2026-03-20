@@ -1,0 +1,11 @@
+SELECT fr.*,
+       u.name AS reviewed_person_name,
+       u.email AS reviewed_person_email,
+       COUNT(fa.id) AS total,
+       COUNT(fa.id) FILTER (WHERE fa.status = 'submitted') AS completed
+FROM feedback_requests fr
+JOIN users u ON u.id = fr.reviewed_person_id
+LEFT JOIN feedback_assignments fa ON fa.request_id = fr.id
+GROUP BY fr.id, u.name, u.email
+ORDER BY fr.deadline DESC, fr.created_at DESC;
+
