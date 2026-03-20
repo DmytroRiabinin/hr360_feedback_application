@@ -6,19 +6,13 @@ export default {
 
 	getStatusFilter() {
 		// Expected widget: sel_status (Select)
-		const raw =
-			typeof sel_status !== "undefined"
-				? sel_status?.selectedOptionValue ?? ""
-				: "";
+		const raw = sel_status?.selectedOptionValue ?? "";
 		return raw ? String(raw).trim() : "";
 	},
 
 	getDeadlineFilter() {
 		// Expected widget: dp_deadline (DatePicker)
-		const raw =
-			typeof dp_deadline !== "undefined"
-				? dp_deadline?.selectedDate ?? ""
-				: "";
+		const raw = dp_deadline?.selectedDate ?? "";
 
 		if (!raw) return "";
 		if (typeof raw === "string") return raw.slice(0, 10);
@@ -32,19 +26,21 @@ export default {
 	},
 
 	getReviewedPersonSearch() {
-		// Select widget (email). Returns "" if nothing selected.
+		// Reviewed person is selected by Select widget (email).
+		// Keep this method aligned with actual widgetName in UI:
+		// `select_reviewed_person_search`.
 		const selected =
-			typeof select_reviewed_person_search !== "undefined"
-				? select_reviewed_person_search?.selectedOptionValue ?? ""
-				: "";
+			select_reviewed_person_search?.selectedOptionValue ??
+			select_reviewed_person_search?.selectedValue ??
+			select_reviewed_person_search?.value ??
+			"";
 		return selected ? String(selected).trim() : "";
 	},
 
 	getFilteredRequestsData(statusRaw, deadlineRaw, searchRaw) {
 		// Client-side filtering so filters work without needing UI event wiring.
 		// Pass explicit args from bindings for better Appsmith reactivity.
-		const rows =
-			typeof qry_get_requests !== "undefined" ? qry_get_requests?.data ?? [] : [];
+		const rows = qry_get_requests?.data ?? [];
 		const status =
 			(statusRaw !== undefined ? statusRaw : this.getStatusFilter()) || "";
 		const deadline =
